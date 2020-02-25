@@ -18,6 +18,11 @@ namespace FastMember
         /// </summary>
         public abstract object Target { get; }
         /// <summary>
+        /// ObjectAccessor下面的TypeAccessor
+        /// </summary>
+        public abstract TypeAccessor TypeAccessor { get; }
+
+        /// <summary>
         /// Use the target types definition of equality
         /// </summary>
         public override bool Equals(object obj)
@@ -74,6 +79,10 @@ namespace FastMember
             {
                 get { return target; }
             }
+            public override TypeAccessor TypeAccessor
+            {
+                get { return accessor; }
+            }
         }
         sealed class DynamicWrapper : ObjectAccessor
         {
@@ -91,7 +100,7 @@ namespace FastMember
                 get { return CallSiteCache.GetValue(name, target); }
                 set { CallSiteCache.SetValue(name, target, value); }
             }
-
+            public override TypeAccessor TypeAccessor => throw new NotImplementedException();
         }
     }
 
