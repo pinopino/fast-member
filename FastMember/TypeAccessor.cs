@@ -6,6 +6,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace FastMember
 {
@@ -305,8 +306,11 @@ namespace FastMember
                 return DynamicAccessor.Singleton;
             }
 
-            PropertyInfo[] props = type.GetTypeAndInterfaceProperties(BindingFlags.Public | BindingFlags.Instance);
-            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+            BindingFlags flags = allowNonPublicAccessors ?
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance :
+                BindingFlags.Public | BindingFlags.Instance;
+            PropertyInfo[] props = type.GetProperties(flags);
+            FieldInfo[] fields = type.GetFields(flags);
             Dictionary<string, int> map = new Dictionary<string, int>();
             List<MemberInfo> members = new List<MemberInfo>(props.Length + fields.Length);
             int i = 0;
@@ -318,7 +322,15 @@ namespace FastMember
                     members.Add(prop);
                 }
             }
-            foreach (var field in fields) if (!map.ContainsKey(field.Name)) { map.Add(field.Name, i++); members.Add(field); }
+            foreach (var field in fields)
+            {
+                if (!map.ContainsKey(field.Name) &&
+                    !Attribute.IsDefined(field, typeof(CompilerGeneratedAttribute)))
+                {
+                    map.Add(field.Name, i++);
+                    members.Add(field);
+                }
+            }
 
             ConstructorInfo ctor = null;
             if (type.IsClass && !type.IsAbstract)
