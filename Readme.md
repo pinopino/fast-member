@@ -47,13 +47,13 @@ var a = new A{ First = b };
 var accessor = ObjectAccessor.Create(a);
 accessor["First.Second"] = value; // this does not work and gives ArgumentOutOfRangeException
 ```
-解决方案在[这里](https://stackoverflow.com/questions/40305645/how-to-set-nested-property-value-using-fastmember)
+解决方案在[这里](https://stackoverflow.com/questions/40305645/how-to-set-nested-property-value-using-fastmember)，这部分我也已经整合了进来使用起来会更佳方便。
 
 
 
 #### 参考链接：
-https://stackoverflow.com/questions/6158768/c-sharp-reflection-fastest-way-to-update-a-property-value
-https://stackoverflow.com/questions/26803788/fastmember-access-non-public-properties
-https://stackoverflow.com/questions/21976125/how-to-get-the-attribute-data-of-a-member-with-fastmember
+1. https://stackoverflow.com/questions/6158768/c-sharp-reflection-fastest-way-to-update-a-property-value
+2. https://stackoverflow.com/questions/26803788/fastmember-access-non-public-properties
+3. https://stackoverflow.com/questions/21976125/how-to-get-the-attribute-data-of-a-member-with-fastmember
 
 
